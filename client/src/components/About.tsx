@@ -13,6 +13,7 @@ export default function About() {
           <p>{profile.biography}</p>
           <div className="profile-facts">
             <div><span>University</span><strong>{profile.university}</strong></div>
+            <div><span>Degree</span><strong>{profile.degree}</strong></div>
             <div><span>Academic record</span><strong>{profile.cgpa}</strong></div>
             <div><span>Current interests</span><strong>{profile.interests.join(' · ')}</strong></div>
           </div>

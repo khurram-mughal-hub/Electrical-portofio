@@ -1,22 +1,25 @@
 export const profile = {
-  name: 'Your Name',
+  name: 'Atta Muhammad',
   role: 'Electrical Engineering Student',
-  introduction: 'Building thoughtful systems at the intersection of circuits, code, and energy.',
-  biography:
-    'I am an electrical engineering student interested in understanding how ideas move from a circuit diagram into reliable, real-world systems. Add a personal introduction here.',
-  university: 'Add your university',
-  cgpa: 'Add your CGPA',
-  interests: ['Embedded systems', 'Power & energy', 'Control systems'],
-  email: '',
-  linkedin: '',
-  github: '',
-  cvPath: '',
+  introduction:
+    'I am an electrical engineering student with a strong interest in circuits, power systems, and electronics. I enjoy turning theory into practical projects and learning how electrical systems work in the real world. I am looking for opportunities to build hands-on experience, grow my technical skills, and contribute to meaningful engineering work.',
+  biography: 'Turning schematics into sparks of reality.',
+  university: 'University of Engineering and Technology',
+  degree: 'Electrical Engineering',
+  cgpa: '3.431 / 4.00',
+  interests: ['Circuits', 'Power systems', 'Electronics'],
+  email: 'attamuhammadmazhar@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/atta-muhammad-81051540a',
+  github: 'https://github.com/Atta-Muhammad-Mazhar',
+  cvPath: '/Atta_Muhammad_Mazhar_CV_1.pdf',
 }
 
 export const skills = [
-  { group: 'Electrical', items: ['Circuit design', 'Power systems', 'Control systems'] },
-  { group: 'Embedded', items: ['Microcontrollers', 'Embedded C', 'PCB prototyping'] },
-  { group: 'Engineering tools', items: ['KiCad', 'LTspice', 'MATLAB', 'Simulink', 'ETAP', 'Proteus', 'STM32', 'ESP32'] },
+  { group: 'Programming Languages', items: ['Python', 'C', 'C#', 'SystemVerilog'] },
+  { group: 'EDA & Simulation Tools', items: ['LTspice', 'Multisim (exposure)', 'Circuit simulators (exposure)'] },
+  { group: 'Game Development', items: ['Unity 2D/3D', 'C# scripting'] },
+  { group: 'Developer Tools', items: ['Git', 'GitHub', 'VS Code'] },
+  { group: 'Soft Skills', items: ['Analytical thinking', 'Problem solving', 'Team collaboration', 'Fast learner'] },
 ]
 
 export const projects = [
@@ -47,7 +50,22 @@ export const projects = [
 ]
 
 export const journey = [
-  { type: 'Education', title: 'Electrical Engineering', organization: 'Add institution', detail: 'Add study dates and verified details.' },
-  { type: 'Internship', title: 'Add internship title', organization: 'Add organization', detail: 'Replace with a concise description of your experience.' },
-  { type: 'Society', title: 'Add society role', organization: 'Add student society', detail: 'Add verified role details and dates.' },
+  {
+    type: 'Education',
+    title: 'Electrical Engineering',
+    organization: 'University of Engineering and Technology',
+    detail: 'Undergraduate student · CGPA 3.431 / 4.00',
+  },
+  {
+    type: 'Area of focus',
+    title: 'Circuits, power systems & electronics',
+    organization: 'Engineering interests',
+    detail: 'Turning theory into practical projects and learning how electrical systems work in the real world.',
+  },
+  {
+    type: 'Technical toolkit',
+    title: 'Programming, simulation & development',
+    organization: 'Current skills',
+    detail: 'Python, C, C#, SystemVerilog, LTspice, Unity, Git and GitHub; exposure to Multisim and circuit simulators.',
+  },
 ]
