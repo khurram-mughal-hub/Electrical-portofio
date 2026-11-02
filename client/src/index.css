@@ -153,11 +153,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   padding-top: 6rem;
 }
 .hero-copy { position: relative; z-index: 1; max-width: 660px; padding: 5rem 0 6rem; }
-.hero-copy > :is(.eyebrow, h1, .hero-role, .hero-intro),
-.content-section :is(.section-index, .eyebrow, h2, h3, p, .card-index, .mono-note, .tag, .project-number, .timeline-marker, .text-link, .project-placeholder, .form-note, .cv-note, .contact-coordinate, .contact-link-item > *, .form-field > span:first-child, .field-error, .placeholder-value, .unavailable-link) {
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-}
 .eyebrow, .section-index, .mono-note, .card-index, .project-number, .contact-coordinate {
   color: var(--glow);
   font-family: var(--mono);
