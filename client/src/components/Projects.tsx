@@ -23,7 +23,7 @@ export default function Projects() {
                 }
               }}
               onPointerMove={(event) => {
-                if (event.pointerType === 'touch' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
                 const bounds = event.currentTarget.getBoundingClientRect()
                 const x = (event.clientX - bounds.left) / bounds.width
                 const y = (event.clientY - bounds.top) / bounds.height
@@ -31,7 +31,18 @@ export default function Projects() {
                 event.currentTarget.style.setProperty('--tilt-y', `${(x - 0.5) * 16}deg`)
               }}
               onPointerDown={(event) => {
-                if (event.pointerType === 'touch') window.dispatchEvent(new CustomEvent('portfolio:coil-pulse'))
+                const bounds = event.currentTarget.getBoundingClientRect()
+                const x = (event.clientX - bounds.left) / bounds.width
+                const y = (event.clientY - bounds.top) / bounds.height
+                event.currentTarget.style.setProperty('--tilt-x', `${(0.5 - y) * 16}deg`)
+                event.currentTarget.style.setProperty('--tilt-y', `${(x - 0.5) * 16}deg`)
+                window.dispatchEvent(new CustomEvent('portfolio:coil-pulse'))
+              }}
+              onPointerUp={(event) => {
+                if (event.pointerType === 'touch') {
+                  event.currentTarget.style.setProperty('--tilt-x', '0deg')
+                  event.currentTarget.style.setProperty('--tilt-y', '0deg')
+                }
               }}
               onPointerLeave={(event) => {
                 event.currentTarget.style.setProperty('--tilt-x', '0deg')
