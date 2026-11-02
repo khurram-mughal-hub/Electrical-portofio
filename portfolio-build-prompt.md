@@ -77,6 +77,8 @@ portfolio/
 │   ├── package.json
 │   ├── tsconfig.json
 │   ├── vite.config.ts
+│   ├── public/
+│   │   └── profile-nobg.png   (transparent profile portrait)
 │   └── src/
 │       ├── main.tsx
 │       ├── App.tsx
@@ -93,6 +95,7 @@ portfolio/
 │       ├── hooks/useScrollProgress.ts
 │       ├── components/
 │       │   ├── Navbar.tsx
+│       │   ├── ScrollLine.tsx (glowing section progress line)
 │       │   ├── Hero.tsx
 │       │   ├── About.tsx
 │       │   ├── Skills.tsx
@@ -152,6 +155,10 @@ The server must refuse to start if a required variable is missing, and never exp
 - The contact form saves to the database and sends both emails.
 - Lighthouse accessibility 90+, no console errors, works on mobile.
 - Colors stay maroon and black everywhere.
+- The transparent profile portrait appears to the left of the About bio, fades into the background, and has a reduced-motion-aware pointer tilt.
+- Project cards tilt up to 8 degrees, lift, sweep with light, stagger their tags, dim siblings, and briefly pulse the background coil on hover; touch uses active states.
+- Skill items animate their icon, maroon underline, text emphasis, and decorative current bar on hover; touch and reduced-motion behavior are supported.
+- A glossy, glowing left-side progress line maps its nodes to the six real sections, tracks scroll progress, supports smooth-click navigation, recalculates on resize, and hides labels on mobile.
 - The README explains how to deploy the client (Vercel) and the server (Render or Railway).
 
 ## 10. Output format

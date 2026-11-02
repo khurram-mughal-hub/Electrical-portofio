@@ -22,6 +22,7 @@ export const coilVertexShader = `
 
 export const coilFragmentShader = `
   uniform float uGlow;
+  uniform float uHover;
   varying float vPhase;
   varying float vCurrent;
 
@@ -30,7 +31,7 @@ export const coilFragmentShader = `
     vec3 deepMaroon = vec3(0.30, 0.055, 0.09);
     vec3 roseLight = vec3(0.95, 0.68, 0.68);
     vec3 color = mix(deepMaroon, roseLight, clamp(vCurrent * 0.38, 0.0, 0.5));
-    float glow = (0.72 + uGlow * 0.45) * pulse;
+    float glow = (0.72 + uGlow * 0.45 + uHover * 0.65) * pulse;
     gl_FragColor = vec4(color * glow, 0.94);
   }
 `

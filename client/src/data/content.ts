@@ -11,6 +11,7 @@ export const profile = {
   email: 'attamuhammadmazhar@gmail.com',
   linkedin: 'https://www.linkedin.com/in/atta-muhammad-81051540a',
   github: 'https://github.com/Atta-Muhammad-Mazhar',
+  photoPath: '/profile-nobg.png',
   cvPath: '/Atta_Muhammad_Mazhar_CV_1.pdf',
 }
 

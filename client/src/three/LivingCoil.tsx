@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { CatmullRomCurve3, Float32BufferAttribute, Group, TubeGeometry, Vector3, ShaderMaterial } from 'three'
 import { coilFragmentShader, coilVertexShader } from './coilShader'
 
@@ -56,12 +56,22 @@ export default function LivingCoil({ progress }: { progress: number }) {
   const group = useRef<Group>(null)
   const material = useRef<ShaderMaterial>(null)
   const geometry = useMemo(createCoilGeometry, [])
+  const hoverPulse = useRef(0)
   const uniforms = useMemo(() => ({
     uProgress: { value: 0 },
     uTime: { value: 0 },
     uGlow: { value: 0 },
+    uHover: { value: 0 },
   }), [])
   const previous = useRef(progress)
+
+  useEffect(() => {
+    const onCoilPulse = () => {
+      hoverPulse.current = 1
+    }
+    window.addEventListener('portfolio:coil-pulse', onCoilPulse)
+    return () => window.removeEventListener('portfolio:coil-pulse', onCoilPulse)
+  }, [])
 
   useFrame(({ clock }, delta) => {
     if (group.current) {
@@ -73,6 +83,8 @@ export default function LivingCoil({ progress }: { progress: number }) {
       material.current.uniforms.uTime.value = clock.elapsedTime
       const velocity = Math.abs(progress - previous.current) / Math.max(delta, 0.001)
       material.current.uniforms.uGlow.value += (Math.min(velocity, 1.4) - material.current.uniforms.uGlow.value) * Math.min(delta * 3, 1)
+      hoverPulse.current = Math.max(0, hoverPulse.current - delta * 1.6)
+      material.current.uniforms.uHover.value += (hoverPulse.current - material.current.uniforms.uHover.value) * Math.min(delta * 8, 1)
       previous.current = progress
     }
   })

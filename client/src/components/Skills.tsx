@@ -15,7 +15,17 @@ export default function Skills() {
               <span className="card-index">0{index + 1}</span>
               <h3>{category.group}</h3>
               <ul>
-                {category.items.map((skill) => <li key={skill}>{skill}</li>)}
+                {category.items.map((skill) => (
+                  <li className="skill-item" key={skill}>
+                    <span className="skill-item-label">
+                      <svg className="skill-icon" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M9.3 1.5 3.8 8h3.5l-.6 6.5 5.5-7H8.8z" />
+                      </svg>
+                      <span>{skill}</span>
+                    </span>
+                    <span className="skill-power" aria-hidden="true"><span className="skill-power-fill" /></span>
+                  </li>
+                ))}
               </ul>
             </article>
           ))}

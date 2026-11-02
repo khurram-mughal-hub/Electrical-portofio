@@ -1,6 +1,6 @@
 # Electrical Engineering Portfolio
 
-A responsive React portfolio with a fixed, scroll-reactive electrical scene and an Express API for validated, persisted contact messages. Personal profile and project details are intentionally safe placeholders; edit `client/src/data/content.ts` before publishing.
+A responsive React portfolio with a fixed, scroll-reactive electrical scene, a personalized profile portrait, animated project/skill cards, a glowing section progress line, and an Express API for validated, persisted contact messages. Edit `client/src/data/content.ts` to update profile, skills, projects, and journey details.
 
 ## Requirements
 
@@ -64,6 +64,8 @@ Only `VITE_` variables are client-bundle settings. Never put secrets in this fil
 Update `client/src/data/content.ts` with accurate, user-approved profile, academic, work, skill, project, and link information. The initial text is explicitly placeholder content and does not invent a person's name, university, grades, internships, projects, social accounts, email, or CV. Add a real CV asset under `client/public/` and set `profile.cvPath` to its public path to enable the download control.
 
 The page honors `prefers-reduced-motion`. When reduced motion is enabled or WebGL is not available, it avoids the 3D canvas and shows a CSS scene fallback. The canvas is lazy-loaded, pixel ratio is capped, and scene objects are intentionally limited. Keyboard focus, skip navigation, form errors, and submission status are exposed accessibly.
+
+The About portrait is served from `client/public/profile-nobg.png`. Project cards respond to pointer position and pulse the background coil; skill items and the section progress line use maroon interaction states. Touch and reduced-motion preferences are supported.
 
 ## API
 

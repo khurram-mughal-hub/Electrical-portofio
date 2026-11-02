@@ -15,7 +15,7 @@ export default function Navbar() {
   return (
     <header className="site-header">
       <a className="brand" href="#home" aria-label={`${profile.name} — home`}>
-        <span className="brand-mark" aria-hidden="true">E</span>
+        <img className="brand-mark" src={profile.photoPath} alt="" aria-hidden="true" />
         <span>{profile.name}</span>
       </a>
       <button
