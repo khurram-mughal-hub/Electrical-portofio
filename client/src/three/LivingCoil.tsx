@@ -2,6 +2,7 @@ import { useFrame } from '@react-three/fiber'
 import { useEffect, useMemo, useRef } from 'react'
 import { CatmullRomCurve3, Float32BufferAttribute, Group, TubeGeometry, Vector3, ShaderMaterial } from 'three'
 import { coilFragmentShader, coilVertexShader } from './coilShader'
+import { useMobile, useTablet } from '../hooks/useMobile'
 
 const SEGMENTS = 520
 const SIDES = 6
@@ -52,7 +53,10 @@ function createCoilGeometry() {
   return base
 }
 
-export default function LivingCoil({ progress }: { progress: number }) {
+export default function LivingCoil({ progress, reducedMotion }: { progress: number; reducedMotion: boolean }) {
+  const mobile = useMobile()
+  const tablet = useTablet()
+  const compactLandscape = tablet && window.matchMedia('(orientation: landscape) and (pointer: coarse)').matches
   const group = useRef<Group>(null)
   const material = useRef<ShaderMaterial>(null)
   const geometry = useMemo(createCoilGeometry, [])
@@ -62,6 +66,7 @@ export default function LivingCoil({ progress }: { progress: number }) {
     uTime: { value: 0 },
     uGlow: { value: 0 },
     uHover: { value: 0 },
+    uOpacity: { value: 0.94 },
   }), [])
   const previous = useRef(progress)
 
@@ -75,22 +80,63 @@ export default function LivingCoil({ progress }: { progress: number }) {
 
   useFrame(({ clock }, delta) => {
     if (group.current) {
-      group.current.rotation.y += delta * 0.09
-      group.current.rotation.x = Math.sin(clock.elapsedTime * 0.12) * 0.08
+      if (!reducedMotion) {
+        group.current.rotation.y += delta * 0.15
+        group.current.rotation.x = mobile
+          ? 0
+          : Math.sin(clock.elapsedTime * 0.12) * 0.08
+      }
+
+      if (mobile) {
+        const stops = [
+          { at: 0, position: [0, 1.65, -1.6], scale: 0.64 },
+          { at: 0.14, position: [0, 1.65, -1.6], scale: 0.64 },
+          { at: 0.2, position: [1.35, 2.15, -1.8], scale: 0.52 },
+          { at: 0.38, position: [1.35, 2.15, -1.8], scale: 0.52 },
+          { at: 0.43, position: [0, 2.45, -1.8], scale: 0.58 },
+          { at: 0.57, position: [0, 2.45, -1.8], scale: 0.58 },
+          { at: 0.63, position: [0, 0.35, -1.8], scale: 0.56 },
+          { at: 1, position: [0, 0.35, -1.8], scale: 0.56 },
+        ]
+        let next = stops.findIndex(({ at }) => at > progress)
+        if (next < 0) next = stops.length - 1
+        const from = stops[Math.max(0, next - 1)]
+        const to = stops[next]
+        const amount = Math.max(0, Math.min(1, (progress - from.at) / (to.at - from.at)))
+        const eased = amount * amount * (3 - 2 * amount)
+        group.current.position.set(
+          from.position[0] + (to.position[0] - from.position[0]) * eased,
+          from.position[1] + (to.position[1] - from.position[1]) * eased,
+          from.position[2] + (to.position[2] - from.position[2]) * eased,
+        )
+        const scale = from.scale + (to.scale - from.scale) * eased
+        group.current.scale.setScalar(scale)
+      }
     }
     if (material.current) {
-      material.current.uniforms.uProgress.value += (progress - material.current.uniforms.uProgress.value) * Math.min(delta * 1.8, 1)
-      material.current.uniforms.uTime.value = clock.elapsedTime
+      if (reducedMotion) material.current.uniforms.uProgress.value = progress
+      else material.current.uniforms.uProgress.value += (progress - material.current.uniforms.uProgress.value) * Math.min(delta * 1.8, 1)
+      material.current.uniforms.uTime.value = reducedMotion ? 0 : clock.elapsedTime
       const velocity = Math.abs(progress - previous.current) / Math.max(delta, 0.001)
-      material.current.uniforms.uGlow.value += (Math.min(velocity, 1.4) - material.current.uniforms.uGlow.value) * Math.min(delta * 3, 1)
-      hoverPulse.current = Math.max(0, hoverPulse.current - delta * 1.6)
-      material.current.uniforms.uHover.value += (hoverPulse.current - material.current.uniforms.uHover.value) * Math.min(delta * 8, 1)
+      if (reducedMotion) {
+        material.current.uniforms.uGlow.value = 0
+        material.current.uniforms.uHover.value = 0
+      } else {
+        material.current.uniforms.uGlow.value += (Math.min(velocity, 1.4) - material.current.uniforms.uGlow.value) * Math.min(delta * 3, 1)
+        hoverPulse.current = Math.max(0, hoverPulse.current - delta * 1.6)
+        material.current.uniforms.uHover.value += (hoverPulse.current - material.current.uniforms.uHover.value) * Math.min(delta * 8, 1)
+      }
+      material.current.uniforms.uOpacity.value = mobile && progress >= 0.62 ? 0.45 : 0.94
       previous.current = progress
     }
   })
 
   return (
-    <group ref={group} position={[2.8, 0.05, -1.6]} scale={0.9}>
+    <group
+      ref={group}
+      position={mobile ? [0, 1.65, -1.6] : [2.8, 0.05, -1.6]}
+      scale={mobile ? 0.64 : compactLandscape ? 0.55 : tablet ? 0.7 : 0.9}
+    >
       <mesh geometry={geometry}>
         <shaderMaterial
           ref={material}

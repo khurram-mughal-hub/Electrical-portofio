@@ -23,7 +23,7 @@ export default function Projects() {
                 }
               }}
               onPointerMove={(event) => {
-                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+                if (event.pointerType !== 'mouse' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
                 const bounds = event.currentTarget.getBoundingClientRect()
                 const x = (event.clientX - bounds.left) / bounds.width
                 const y = (event.clientY - bounds.top) / bounds.height
@@ -31,11 +31,16 @@ export default function Projects() {
                 event.currentTarget.style.setProperty('--tilt-y', `${(x - 0.5) * 16}deg`)
               }}
               onPointerDown={(event) => {
-                const bounds = event.currentTarget.getBoundingClientRect()
-                const x = (event.clientX - bounds.left) / bounds.width
-                const y = (event.clientY - bounds.top) / bounds.height
-                event.currentTarget.style.setProperty('--tilt-x', `${(0.5 - y) * 16}deg`)
-                event.currentTarget.style.setProperty('--tilt-y', `${(x - 0.5) * 16}deg`)
+                const card = event.currentTarget
+                card.classList.add('is-tapped')
+                window.setTimeout(() => card.classList.remove('is-tapped'), 760)
+                if (event.pointerType === 'mouse') {
+                  const bounds = card.getBoundingClientRect()
+                  const x = (event.clientX - bounds.left) / bounds.width
+                  const y = (event.clientY - bounds.top) / bounds.height
+                  card.style.setProperty('--tilt-x', `${(0.5 - y) * 16}deg`)
+                  card.style.setProperty('--tilt-y', `${(x - 0.5) * 16}deg`)
+                }
                 window.dispatchEvent(new CustomEvent('portfolio:coil-pulse'))
               }}
               onPointerUp={(event) => {

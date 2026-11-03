@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import type { Group } from 'three'
+import { useMobile } from '../hooks/useMobile'
 
 const parts = [
   { position: [-4.1, 1.3, -1.8] as [number, number, number], kind: 'resistor' },
@@ -39,9 +40,11 @@ function FloatingPart({ position, kind, index }: { position: [number, number, nu
 }
 
 export default function FloatingParts() {
+  const mobile = useMobile()
+
   return (
     <group>
-      {parts.map((part, index) => <FloatingPart {...part} key={part.kind} index={index} />)}
+      {(mobile ? parts.slice(0, 3) : parts).map((part, index) => <FloatingPart {...part} key={part.kind} index={index} />)}
     </group>
   )
 }

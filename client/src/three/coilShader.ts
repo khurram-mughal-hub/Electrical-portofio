@@ -8,9 +8,9 @@ export const coilVertexShader = `
   varying float vCurrent;
 
   void main() {
-    float towardToroid = smoothstep(0.12, 0.34, uProgress);
-    float towardSine = smoothstep(0.38, 0.62, uProgress);
-    float towardSpiral = smoothstep(0.67, 0.88, uProgress);
+    float towardToroid = smoothstep(0.10, 0.24, uProgress);
+    float towardSine = smoothstep(0.35, 0.49, uProgress);
+    float towardSpiral = smoothstep(0.57, 0.71, uProgress);
     vec3 morphed = mix(position, aShape1, towardToroid);
     morphed = mix(morphed, aShape2, towardSine);
     morphed = mix(morphed, aShape3, towardSpiral);
@@ -23,6 +23,7 @@ export const coilVertexShader = `
 export const coilFragmentShader = `
   uniform float uGlow;
   uniform float uHover;
+  uniform float uOpacity;
   varying float vPhase;
   varying float vCurrent;
 
@@ -32,6 +33,6 @@ export const coilFragmentShader = `
     vec3 roseLight = vec3(0.95, 0.68, 0.68);
     vec3 color = mix(deepMaroon, roseLight, clamp(vCurrent * 0.38, 0.0, 0.5));
     float glow = (0.72 + uGlow * 0.45 + uHover * 0.65) * pulse;
-    gl_FragColor = vec4(color * glow, 0.94);
+    gl_FragColor = vec4(color * glow, uOpacity);
   }
 `

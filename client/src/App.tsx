@@ -41,14 +41,14 @@ class SceneBoundary extends Component<{ children: ReactNode; fallback: ReactNode
   }
 }
 
-function SceneBackdrop({ progress, supported }: { progress: number; supported: boolean }) {
+function SceneBackdrop({ progress, supported, reducedMotion }: { progress: number; supported: boolean; reducedMotion: boolean }) {
   if (!supported) {
     return <div className="scene-fallback" aria-hidden="true"><span className="fallback-ring" /></div>
   }
   return (
     <SceneBoundary fallback={<div className="scene-fallback" aria-hidden="true"><span className="fallback-ring" /></div>}>
       <Suspense fallback={<div className="scene-fallback" aria-hidden="true"><span className="fallback-ring" /></div>}>
-        <Scene progress={progress} />
+        <Scene progress={progress} reducedMotion={reducedMotion} />
       </Suspense>
     </SceneBoundary>
   )
@@ -57,12 +57,17 @@ function SceneBackdrop({ progress, supported }: { progress: number; supported: b
 export default function App() {
   const progress = useScrollProgress()
   const [sceneSupported, setSceneSupported] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    setSceneSupported(!reducedMotion && supportsWebGL())
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const updateMotionPreference = () => setReducedMotion(motionPreference.matches)
+    updateMotionPreference()
+    motionPreference.addEventListener('change', updateMotionPreference)
+    setSceneSupported(supportsWebGL())
+    return () => motionPreference.removeEventListener('change', updateMotionPreference)
   }, [])
 
   useEffect(() => {
@@ -146,7 +151,7 @@ export default function App() {
       <a className="skip-link" href="#main-content">Skip to content</a>
       <div className="scroll-progress" aria-hidden="true"><span style={{ transform: `scaleX(${progress})` }} /></div>
       <ScrollLine activeSection={activeSection} onNavigate={navigateToSection} />
-      <SceneBackdrop progress={progress} supported={sceneSupported} />
+      <SceneBackdrop progress={progress} supported={sceneSupported} reducedMotion={reducedMotion} />
       <Navbar />
       <main id="main-content">
         <Hero />

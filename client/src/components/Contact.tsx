@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import type { FocusEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { profile } from '../data/content'
@@ -19,6 +20,18 @@ const socialLinks = [
   { label: 'LinkedIn', value: profile.linkedin },
   { label: 'GitHub', value: profile.github },
 ]
+
+function keepFieldVisible(event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  if (!window.matchMedia('(max-width: 767px)').matches) return
+
+  const field = event.currentTarget
+  window.setTimeout(() => {
+    field.scrollIntoView({
+      block: 'center',
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    })
+  }, 250)
+}
 
 export default function Contact() {
   const [status, setStatus] = useState<{ kind: 'success' | 'error'; message: string } | null>(null)
@@ -59,23 +72,23 @@ export default function Contact() {
             <div className="form-grid">
               <label className="form-field">
                 <span>Name</span>
-                <input autoComplete="name" {...register('name')} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'name-error' : undefined} />
+                <input autoComplete="name" inputMode="text" onFocus={keepFieldVisible} {...register('name')} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'name-error' : undefined} />
                 {errors.name && <span className="field-error" id="name-error">{errors.name.message}</span>}
               </label>
               <label className="form-field">
                 <span>Email</span>
-                <input type="email" autoComplete="email" {...register('email')} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'email-error' : undefined} />
+                <input type="email" inputMode="email" autoComplete="email" onFocus={keepFieldVisible} {...register('email')} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'email-error' : undefined} />
                 {errors.email && <span className="field-error" id="email-error">{errors.email.message}</span>}
               </label>
             </div>
             <label className="form-field">
               <span>Subject</span>
-              <input {...register('subject')} aria-invalid={Boolean(errors.subject)} aria-describedby={errors.subject ? 'subject-error' : undefined} />
+              <input inputMode="text" autoComplete="off" onFocus={keepFieldVisible} {...register('subject')} aria-invalid={Boolean(errors.subject)} aria-describedby={errors.subject ? 'subject-error' : undefined} />
               {errors.subject && <span className="field-error" id="subject-error">{errors.subject.message}</span>}
             </label>
             <label className="form-field">
               <span>Message</span>
-              <textarea rows={5} {...register('message')} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? 'message-error' : undefined} />
+              <textarea rows={5} onFocus={keepFieldVisible} {...register('message')} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? 'message-error' : undefined} />
               {errors.message && <span className="field-error" id="message-error">{errors.message.message}</span>}
             </label>
             <div className="honeypot" aria-hidden="true">

@@ -2,6 +2,7 @@ import { Line } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import type { Mesh } from 'three'
+import { useMobile } from '../hooks/useMobile'
 
 const traces: [number, number, number][][] = [
   [[-7, -2.2, -5], [-4, -2.2, -5], [-4, -1.3, -5], [-2.4, -1.3, -5], [-2.4, 0.2, -5]],
@@ -57,15 +58,19 @@ function CurrentPulse({ path, index }: { path: [number, number, number][]; index
 }
 
 export default function CircuitFloor() {
+  const mobile = useMobile()
+  const visibleTraces = mobile ? traces.slice(0, 6) : traces
+  const visiblePads = mobile ? pads.slice(0, 5) : pads
+
   return (
     <group>
-      {traces.map((trace, index) => (
+      {visibleTraces.map((trace, index) => (
         <group key={index}>
           <Line points={trace} color={index % 3 === 0 ? '#c0344a' : '#8c1c2e'} lineWidth={1} transparent opacity={0.58} />
           <CurrentPulse path={trace} index={index} />
         </group>
       ))}
-      {pads.map((position, index) => (
+      {visiblePads.map((position, index) => (
         <mesh key={index} position={[position[0], position[1], position[2] + 0.01]}>
           <cylinderGeometry args={[0.07, 0.07, 0.025, 8]} />
           <meshBasicMaterial color={index % 2 ? '#8c1c2e' : '#c0344a'} toneMapped={false} />
