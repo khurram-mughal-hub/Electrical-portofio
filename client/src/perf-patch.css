@@ -1,0 +1,28 @@
+/* ===== Paste this block at the VERY BOTTOM of client/src/index.css =====
+   Same glowing head on the scroll line, but the pulse now fades a glow layer (GPU friendly)
+   instead of animating box-shadow, which repainted the screen every frame, forever. */
+
+.scroll-line-fill::after {
+  animation: none;
+  box-shadow: 0 0 7px #f3ebe8, 0 0 16px #c0344a, 0 0 26px rgb(192 52 74 / 90%);
+}
+.scroll-line-fill::before {
+  position: absolute;
+  right: 50%;
+  bottom: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #f3ebe8, 0 0 23px #c0344a, 0 0 34px rgb(192 52 74 / 92%);
+  content: '';
+  opacity: 0;
+  transform: translate(50%, 50%);
+  animation: energy-head-glow 1.5s ease-in-out infinite;
+  will-change: opacity;
+}
+@keyframes energy-head-glow {
+  50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-line-fill::before { animation: none; }
+}
