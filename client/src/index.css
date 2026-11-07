@@ -818,3 +818,59 @@ h2 { margin-bottom: 0; font-family: var(--serif); font-size: clamp(3rem, 5.2vw, 
   .project-card.is-tapped, .project-card:active { transform: none !important; }
   .fallback-ring, .fallback-ring::before, .fallback-ring::after { animation: none; }
 }
+
+.projects-wheel { position: relative; }
+.wheel-controls { position: absolute; z-index: 4; top: 50%; right: 0; left: 0; display: flex; justify-content: space-between; pointer-events: none; transform: translateY(-50%); }
+.wheel-button { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid rgb(192 52 74 / 72%); border-radius: 50%; background: rgb(10 7 8 / 88%); color: var(--text); font-size: 1.15rem; pointer-events: auto; transition: background 220ms ease, box-shadow 220ms ease, transform 220ms ease; }
+.wheel-button:hover, .wheel-button:focus-visible { background: var(--maroon); box-shadow: 0 0 20px rgb(192 52 74 / 32%); transform: scale(1.06); }
+.wheel-button:focus-visible, .wheel-dot:focus-visible, .project-wheel-stage:focus-visible, .project-card:focus-visible { outline: 2px solid var(--glow); outline-offset: 4px; }
+.project-wheel-stage { position: relative; height: 510px; overflow: hidden; perspective: 1400px; perspective-origin: 50% 46%; cursor: grab; isolation: isolate; touch-action: pan-y; }
+.project-wheel-stage.is-dragging { cursor: grabbing; }
+.wheel-glow { position: absolute; z-index: -1; top: 50%; left: 50%; width: min(58%, 430px); height: 72%; border-radius: 50%; background: radial-gradient(ellipse, rgb(140 28 46 / 22%), rgb(140 28 46 / 7%) 44%, transparent 72%); filter: blur(26px); pointer-events: none; transform: translate(-50%, -50%); }
+.wheel-track { position: absolute; z-index: -1; top: 58%; left: 50%; width: min(94%, 1080px); height: min(94vw, 630px); max-height: 480px; border: 1px solid rgb(140 28 46 / 25%); border-radius: 50%; box-shadow: 0 0 24px rgb(140 28 46 / 8%), inset 0 0 18px rgb(140 28 46 / 5%); pointer-events: none; transform: translate(-50%, -50%) rotateX(68deg); }
+.project-wheel-world { position: absolute; inset: 0; transform: translateZ(var(--depth-parallax, 0px)) rotateX(var(--steer-x, 0deg)) rotateY(var(--steer-y, 0deg)); transform-style: preserve-3d; transition: transform 280ms ease-out; }
+.project-wheel-stage.is-dragging .project-wheel-world { transition: none; }
+.project-wheel-rotator { position: absolute; inset: 0; transform: rotateY(var(--wheel-angle, 90deg)); transform-style: preserve-3d; }
+.project-wheel-slot { position: absolute; top: 50%; left: 50%; width: var(--card-width, 340px); height: 420px; margin: -210px 0 0 calc(var(--card-width, 340px) / -2); opacity: 0.15; pointer-events: none; transform: scale(var(--side-camera-scale, 0.52)) rotateY(var(--card-angle)) translateZ(var(--wheel-radius, 520px)); transform-style: preserve-3d; transition: opacity 400ms ease, filter 400ms ease, transform 400ms ease; backface-visibility: hidden; }
+.project-wheel-slot.is-near { opacity: 0.55; filter: blur(1.3px); pointer-events: auto; }
+.project-wheel-slot.is-front { z-index: 1; opacity: 1; filter: none; pointer-events: auto; transform: scale(var(--camera-scale, 0.63)) rotateY(var(--card-angle)) translateZ(var(--wheel-radius, 520px)); }
+.project-wheel-stage.is-animating .project-wheel-slot { will-change: transform; }
+.project-card, .project-card:focus-within, .project-card:active { position: absolute; inset: 0; z-index: auto; overflow: visible; border: 0; background: transparent; box-shadow: none; transform: none; transition: none; transform-style: preserve-3d; }
+.project-card::after, .project-card:focus-within::after, .project-card:active::after { content: none; }
+.project-card-face { position: absolute; inset: 0; overflow: hidden; border: 1px solid #3a1a21; border-radius: 14px; background: rgb(18 10 12 / 72%); box-shadow: 0 18px 48px rgb(5 3 4 / 46%); backdrop-filter: blur(12px); transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transition: transform 300ms cubic-bezier(0.2, 0.7, 0.2, 1), border-color 260ms ease, box-shadow 260ms ease; }
+.project-card-face::after { position: absolute; z-index: 3; inset: 0; background: linear-gradient(112deg, transparent 34%, rgb(243 235 232 / 18%) 48%, rgb(192 52 74 / 18%) 52%, transparent 66%); content: ''; opacity: 0; pointer-events: none; transform: translateX(-140%) skewX(-15deg); }
+.project-card.is-active:hover .project-card-face, .project-card.is-active:focus-visible .project-card-face { border-color: var(--glow); box-shadow: 0 12px 38px rgb(140 28 46 / 38%), 0 0 22px rgb(192 52 74 / 24%); transform: perspective(900px) translateY(-5px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); }
+.project-card.is-active:hover .project-card-face::after, .project-card.is-active:focus-visible .project-card-face::after { animation: project-light-sweep 760ms ease-out 1; }
+.project-card.is-active .project-card-face { border-color: #c0344a; box-shadow: 0 0 22px rgb(192 52 74 / 14%); }
+.project-arrow { border-radius: 50%; }
+.project-card.is-active .project-arrow { border-color: var(--glow); color: var(--glow); box-shadow: 0 0 12px rgb(192 52 74 / 30%); transform: rotate(45deg); }
+.project-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.62; }
+.project-content { padding: 1.35rem 1.4rem 1.5rem; }
+.project-card h3 { margin: 0.8rem 0 0.45rem; font-size: 1.65rem; }
+.project-card p { min-height: 3.5rem; margin-bottom: 1rem; color: var(--muted); font-size: 0.75rem; line-height: 1.8; }
+.project-card .tag { opacity: 0; transform: translateY(8px); }
+.project-card.is-active .tag { color: #f3ebe8; opacity: 1; transform: translateY(0); }
+.project-card.is-active .tag-row { transition: transform 300ms ease; }
+.project-placeholder, .text-link { color: var(--text); font-family: var(--mono); font-size: 0.61rem; letter-spacing: 0.04em; }
+.text-link span { margin-left: 0.4rem; color: var(--glow); }
+.wheel-dots { display: flex; justify-content: center; gap: 0.65rem; padding-top: 0.25rem; }
+.wheel-dot { width: 10px; height: 10px; padding: 0; border: 1px solid rgb(192 52 74 / 74%); border-radius: 50%; background: transparent; transition: background 260ms ease, box-shadow 260ms ease, transform 260ms ease; }
+.wheel-dot.is-active { background: var(--glow); box-shadow: 0 0 12px rgb(192 52 74 / 55%); transform: scale(1.18); }
+.wheel-live-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+
+@media (max-width: 767px) {
+  .project-wheel-stage { height: 500px; perspective: 1000px; perspective-origin: 50% 45%; }
+  .wheel-controls { right: 0.2rem; left: 0.2rem; }
+  .wheel-track { top: 58%; width: 110%; height: 420px; }
+  .wheel-glow { width: 72%; height: 68%; filter: blur(17px); }
+  .project-wheel-slot.is-near { filter: none; }
+  .project-card-face { backdrop-filter: blur(8px); }
+  .project-content { padding: 1.15rem 1.2rem 1.25rem; }
+  .project-card h3 { font-size: 1.8rem; }
+  .project-card p { min-height: 0; font-size: 1rem; line-height: 1.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-wheel-slot, .project-card-face, .wheel-button, .wheel-dot { transition-duration: 140ms; }
+  .project-card.is-active:hover .project-card-face, .project-card.is-active:focus-visible .project-card-face { transform: none; }
+}

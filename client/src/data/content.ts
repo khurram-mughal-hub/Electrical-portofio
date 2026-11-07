@@ -29,24 +29,28 @@ export const projects = [
     description: 'A placeholder for a power engineering project. Replace this with your project objective, approach, and results.',
     tags: ['Power systems', 'ETAP'],
     link: '',
+    image: '',
   },
   {
     title: 'Embedded Control Prototype',
     description: 'A placeholder for an embedded project. Add verified details about the hardware, firmware, and measured outcomes.',
     tags: ['Embedded', 'STM32'],
     link: '',
+    image: '',
   },
   {
     title: 'Circuit Simulation',
     description: 'A placeholder for a circuit design project. Document the design constraints and simulation findings here.',
     tags: ['LTspice', 'Circuit design'],
     link: '',
+    image: '',
   },
   {
     title: 'Energy Monitoring Concept',
     description: 'A placeholder for an energy project. Replace it with a concise, accurate summary and a link when ready.',
     tags: ['Energy', 'Instrumentation'],
     link: '',
+    image: '',
   },
 ]
 
